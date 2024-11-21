@@ -2,7 +2,6 @@ console.log("\n************** welcome to Tic Tac Toe  ***********************\n"
 
 let nameOfPlayer1 = prompt("enter a name of first player...");
 let nameOfPlayer2 = prompt("enter a name of second player...");
-
 let index1 = "1";
 let index2 = "2";
 let index3 = "3";
@@ -23,7 +22,7 @@ function inputForUser2(nameOfPlayer2) {
   return player2;
 }
 
-function printTicTacToe() {
+function printGrid() {
   console.clear();
   const line1 = "━━━╋━━━╋━━━" + "\n";
   const line2 = "   ┃   ┃     " + "\n";
@@ -37,13 +36,16 @@ function printTicTacToe() {
 
 function winPlayer1() {
   console.log(nameOfPlayer1 + "  is winnner !!");
+  return true;
 }
 
 function winPlayer2() {
   console.log(nameOfPlayer2 + "  is winnner !!");
+  return true;
+
 }
 
-function checkcondition(symbol) {
+function isWinOrNot(symbol) {
   if (index1 === symbol && index2 === symbol && index3 === symbol) {
     return (symbol === "❌") ? winPlayer1() : winPlayer2();
   }
@@ -77,7 +79,7 @@ function checkcondition(symbol) {
 
   }
 
-  return;
+  return false;
 }
 
 function putDataInGrid(player, count) {
@@ -144,26 +146,28 @@ function putDataInGrid(player, count) {
         index9 = symbol;
       }
   }
-  printTicTacToe();
-  checkcondition(symbol);
+  printGrid();
+
+  if(isWinOrNot(symbol)){
+   return;    
+  }
   
   return player === 1 ? putDataInGrid(2, count + 1) : putDataInGrid(1, count + 1);
 }
 
 function enterInGame() {
   console.log("\n\n******************** GAME STARTS HERE ******************** \n");
-  printTicTacToe();
+  printGrid();
   putDataInGrid(1, 1);
-
   console.log("game end ....  ");
 
   return;
 }
 
 function ticTacToe() {
-  const ready = confirm("\ndo you want to play .... ");
+  const isUserReady = confirm("\ndo you want to play .... ");
 
-  if (ready) {
+  if (isUserReady) {
     return enterInGame();
   }
 
