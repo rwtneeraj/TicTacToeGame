@@ -21,42 +21,24 @@ function inputForUser2(nameOfPlayer2) {
 
 function printSample() {
   console.clear();
-  const firstRow = 1 + "   ┃ " + 2 + "  ┃  " + 3 + "\n";
-  const line1 = "━━━━━━╋━━━━━━╋━━━━━" + "\n";
-  const line2 = "      ┃      ┃   " + "\n";
-  const secondRow = 4 + "    ┃ " + 5 + "   ┃  " + 6 + "\n";
-  const thirdRow = 7 + "    ┃ " + 8 + "   ┃  " + 9 + "\n";
+  const firstRow = "  " + 1 + "     " + 2 + "     " + 3 + "  \n";
+  const line1 = "━━━━━╋━━━━━╋━━━━━" + "\n";
+  const line2 = "     ┃     ┃   " + "\n";
+  const secondRow = "  " + 4 + "     " + 5 + "     " + 6 + " \n";
+  const thirdRow = "  " + 7 + "     " + 8 + "     " + 9 + " \n";
   const output = line2 + firstRow + line1 + secondRow + line1 + thirdRow + line2;
 
   console.log(output);
 }
 
-function makeRows(a, b, c) {
-  let line = "        ";
-  let string = "";
-
-  for (let index = 0; index < line.length; index++) {
-    if (index === 1) {
-      string += a;
-    } else if (index === 4) {
-      string += b;
-    } else if (index === 7) {
-      string += c;
-    } else {
-      string += " ";
-    }
-  }
-
-  return string;
-}
 
 function printTicTacToe() {
   console.clear();
-  const line1 = "━━╋━━╋━━" + "\n";
-  const line2 = "  ┃  ┃     " + "\n";
-  const firstRow = makeRows(index1, index2, index3) + "\n";
-  const secondRow = makeRows(index4, index5, index6) + "\n";
-  const thirdRow = makeRows(index7, index8, index9) + "\n";
+  const line1 = "━━━━╋━━━━╋━━━" + "\n";
+  const line2 = "    ┃    ┃     " + "\n";
+  const firstRow =  "  " + index1 + "    " + index2 + "    " + index3 + " \n";
+  const secondRow =  "  " + index4 + "    " + index5 + "    " + index6 + " \n";
+  const thirdRow =  "  " + index7 + "    " + index8 + "    " + index9 + " \n";
   const output = line2 + firstRow + line1 + secondRow + line1 + thirdRow + line2;
 
   console.log(output);
@@ -130,7 +112,7 @@ function putDataInGrid(player, count, nameOfPlayer1, nameOfPlayer2) {
       break;
     case 6:
       if (index6 === "") {
-        index7 = symbol;
+        index6 = symbol;
       }
       break;
     case 7:
@@ -148,8 +130,8 @@ function putDataInGrid(player, count, nameOfPlayer1, nameOfPlayer2) {
         index9 = symbol;
       }
 
-
   }
+
   printTicTacToe();
 
   if (checkcondition()) {
@@ -168,7 +150,7 @@ function putDataInGrid(player, count, nameOfPlayer1, nameOfPlayer2) {
     return;
   }
 
-  return player === 1 ? putDataInGrid(2, count + 1) : putDataInGrid(1, count + 1);
+  return player === 1 ? putDataInGrid(2, count + 1, nameOfPlayer1, nameOfPlayer2) : putDataInGrid(1, count + 1, nameOfPlayer1, nameOfPlayer2);
 }
 
 function enterInGame(nameOfPlayer1, nameOfPlayer2) {
@@ -195,4 +177,3 @@ function ticTacToe() {
 }
 
 ticTacToe();
-
