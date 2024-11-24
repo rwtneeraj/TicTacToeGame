@@ -114,7 +114,7 @@ function showWelcomeContext() {
 }
 
 function printInstruction() {
-  const text = "press the numbers(1 to 9) for choosing the box , if you give wrong input or want to replace then you turn out.. ";
+  const text = "press the numbers(1 to 9) for choosing the box , if you give wrong input or want to replace  then your turn out.. ";
   console.log(text);
 }
 
