@@ -8,15 +8,9 @@ let index7 = "07";
 let index8 = "08";
 let index9 = "09";
 
-function winPlayer1(player1Name) {
-  console.log(player1Name + "  is winnner !!\n");
-  return true;
-}
-
-function winPlayer2(player2Name) {
-  console.log(player2Name + "  is winnner !!\n");
-  return true;
-
+function winingStatement(player, player1Name, player2Name) {
+  const playerName = player === 1 ? player1Name : player2Name;
+  return playerName + "  is winnner !!\n";
 }
 
 function printGrid() {
@@ -28,7 +22,7 @@ function printGrid() {
   const thirdRow = " " + index7 + "   " + index8 + "   " + index9 + " \n";
   const output = line2 + firstRow + line1 + secondRow + line1 + thirdRow + line2;
 
-  console.log(output);
+  return output;
 }
 
 function modifyValueInLocation(input, symbol) {
@@ -86,11 +80,8 @@ function getSymbol(player) {
 }
 
 function inputSection(player, player1Name, player2Name) {
-  if (player === 1) {
-    return +prompt("\nNow  " + player1Name + "'s turn  : 1 to 9  : ");
-  }
-
-  return +prompt("\nNow  " + player2Name + "'s turn  : 1 to 9  : ");
+  const playerName = player === 1 ? player1Name : player2Name;
+  return +prompt("\nNow  " + playerName + "'s turn  : 1 to 9  : ");
 }
 
 function playTicTacToe(player, player1Name, player2Name) {
@@ -101,21 +92,22 @@ function playTicTacToe(player, player1Name, player2Name) {
     const input = inputSection(player, player1Name, player2Name);
 
     modifyValueInLocation(input, symbol);
-    printGrid();
+    console.log(printGrid());
 
     if (isPlayerWin()) {
-      return player === 1 ? winPlayer1(player1Name) : winPlayer2(player2Name);
+      return winingStatement(player, player1Name, player2Name);
     }
   }
+
+  return "no. of attempt emptied...\n";
 }
 
 function showWelcomeContext() {
-  console.log("\n************** welcome to Tic Tac Toe  ***********************\n");
+  return "\n************** welcome to Tic Tac Toe  ***********************\n";
 }
 
-function printInstruction() {
-  const text = "press the numbers(1 to 9) for choosing the box , if you give wrong input or want to replace  then your turn out.. ";
-  console.log(text);
+function Instruction() {
+  return "press the numbers(1 to 9) for choosing the box , if you give wrong input or want to replace then you turn out.. ";
 }
 
 function start() {
@@ -124,11 +116,11 @@ function start() {
   const isUserReady = confirm("\ndo you want to play ....\n ");
 
   if (isUserReady) {
-    showWelcomeContext();
-    printInstruction();
-    printGrid();
-    playTicTacToe(1, nameOfPlayer1, nameOfPlayer2);
-    console.log(" Match Draw!!");
+    console.log(showWelcomeContext());
+    console.log(Instruction());
+    console.log(printGrid());
+    console.log(playTicTacToe(1, nameOfPlayer1, nameOfPlayer2));
+    console.log("Match Draw!!");
   }
 }
 
