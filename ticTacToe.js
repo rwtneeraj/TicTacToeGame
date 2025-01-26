@@ -1,137 +1,170 @@
 const player1Moves = [];
 const player2Moves = [];
-const winningCombination = ["123", "456", "789", "147", "258", "369", "159", "357"];
+const WIN_MESG = " is winner...";
+const winningCombination = [
+  "123",
+  "456",
+  "789",
+  "147",
+  "258",
+  "369",
+  "159",
+  "357",
+];
 
-function isValuePresent(array, value) {
-  for (let index = 0; index < array.length; index++) {
-    if (array[index] === value) {
-      return true;
-    }
-  }
+const isValuePresent = function (array, value) {
+  return array.some((element) => element === value);
+};
 
-  return false;
-}
-
-function getSymbol(player1Moves, player2Moves, index) {
+const getSymbol = function (player1Moves, player2Moves, index) {
   if (isValuePresent(player1Moves, index)) {
     return " ❌ ";
   }
 
   return isValuePresent(player2Moves, index) ? " ⚪️ " : "    ";
-}
+};
 
-function createGrid(player1Moves, player2Moves) {
-  let string = "";
+const displayGrid = function () {
+  let grid = "";
 
   for (let index = 1; index <= 9; index++) {
     if (index % 3 === 1 && index > 3) {
-      string += "\n\n";
+      grid += "\n\n";
     }
-
-    string += getSymbol(player1Moves, player2Moves, index);
-    string += "┃";
+    grid += "    ┃";
   }
 
-  return string;
-}
+  console.log(grid);
+};
 
-function isValidMoves(input) {
-  for (let index = 0; index < 5; index++) {
-    if (player1Moves[index] === input || player2Moves[index] === input) {
+const createGrid = function (player1Moves, player2Moves) {
+  let grid = "";
+
+  for (let index = 1; index <= 9; index++) {
+    if (index % 3 === 1 && index > 3) {
+      grid += "\n\n";
+    }
+
+    grid += getSymbol(player1Moves, player2Moves, index);
+    grid += "┃";
+  }
+
+  return grid;
+};
+
+const isValidMoves = function (moves) {
+  let index = 0;
+
+  while (index < 5) {
+    if (player1Moves[index] === moves || player2Moves[index] === moves) {
       return false;
     }
+    index++;
   }
 
   return true;
-}
+};
 
-function inputSection(playerName) {
+const inputSection = function (playerName) {
   return +prompt("\nNow " + playerName + "'s turn, press a number(1 to 9 ) : ");
-}
+};
 
-function addPlayer1Moves(index, player1Name) {
-  const input1 = inputSection(player1Name);
+const player1Turn = function (index, player1Name) {
+  const moves = inputSection(player1Name);
   console.clear();
 
-  if (!isValidMoves(input1)) {
+  if (!isValidMoves(moves)) {
     return "invalid moves";
   }
 
-  player1Moves[index] = input1;
-  console.log(createGrid(player1Moves, player2Moves));
-}
+  player1Moves[index] = moves;
+  return createGrid(player1Moves, player2Moves);
+};
 
-function addPlayer2Moves(index, player2Name) {
-  const input2 = inputSection(player2Name);
+const player2Turn = function (index, player2Name) {
+  const moves = inputSection(player2Name);
   console.clear();
 
-  if (!isValidMoves(input2)) {
+  if (!isValidMoves(moves)) {
     return "invalid moves";
   }
 
-  player2Moves[index] = input2;
-  console.log(createGrid(player1Moves, player2Moves));
-}
+  player2Moves[index] = moves;
+  return createGrid(player1Moves, player2Moves);
+};
 
-function isSubset(array, subset) {
-  for (let index = 0; index < subset.length; index++) {
-    if (!isValuePresent(array, +  subset[index])) {
+const doesContain = function (moves, winSet) {
+  let index = 0;
+
+  while (index < winSet.length) {
+    if (!isValuePresent(moves, +winSet[index])) {
       return false;
     }
+    
+    index++;
   }
 
   return true;
-}
+};
 
-function isPlayerWin() {
-  for (let index = 1; index < winningCombination.length; index++) {
-    if (isSubset(player1Moves, winningCombination[index])) {
+const arePlayersWin = function () {
+  let index = 1;
+
+  while (index < winningCombination.length) {
+    if (doesContain(player1Moves, winningCombination[index])) {
       return true;
     }
 
-    if (isSubset(player2Moves, winningCombination[index])) {
+    if (doesContain(player2Moves, winningCombination[index])) {
       return true;
     }
+
+    index++;
   }
 
   return false;
-}
+};
 
-function playTicTacToe(player1Name, player2Name) {
+const playTicTacToe = function (player1Name, player2Name) {
+
   for (let index = 0; index < 5; index++) {
+    console.log(player1Turn(index, player1Name));
 
-    console.log(addPlayer1Moves(index, player1Name));
-    if (isPlayerWin()) {
-      return player1Name + " is winner...";
+    if (arePlayersWin()) {
+      return "\n" + player1Name + WIN_MESG;
     }
 
-    console.log(addPlayer2Moves(index, player2Name));
-    if (isPlayerWin()) {
-      return player2Name + " is winner...";
+    console.log(player2Turn(index, player2Name));
+    
+    if (arePlayersWin()) {
+      return "\n" + player2Name + WIN_MESG;
     }
   }
 
-  return "Game Over...";
-}
+  return "\n Game Over...";
+};
 
-function welcomeContext() {
-  return "\n************** welcome to Tic Tac Toe  ***********************\n";
-}
+const printWelcomeContext = function () {
+  console.log(
+    "\n************** welcome to Tic Tac Toe  ***********************\n"
+  );
+};
 
-function instruction() {
-  let message = "press the numbers(1 to 9) for choosing the box ,";
-  message += "if you give wrong input or want to replace then you will miss your turn.";
-  return message;
-}
+const printIntstruction = function () {
+  let message = "press the numbers(1 to 9) for choosing the box ,\n";
+  message +=
+    "if you give wrong input or want to replace then you will miss your turn.\n";
+  console.log(message);
+};
 
-function start() {
-  const nameOfPlayer1 = prompt("\nenter a name of first player...");
-  const nameOfPlayer2 = prompt("\nenter a name of second player...");
+const main = function () {
+  const firstPlayerName = prompt("\nenter a name of first player...");
+  const secondPlayerName = prompt("\nenter a name of second player...");
 
-  console.log(welcomeContext());
-  console.log(instruction());
-  console.log(createGrid(player1Moves, player2Moves));
-  console.log(playTicTacToe(nameOfPlayer1, nameOfPlayer2));
-}
+  printWelcomeContext();
+  printIntstruction();
+  displayGrid();
+  console.log(playTicTacToe(firstPlayerName, secondPlayerName));
+};
 
-start();
+main();
