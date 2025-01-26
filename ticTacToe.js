@@ -1,127 +1,137 @@
-let index1 = "01";
-let index2 = "02";
-let index3 = "03";
-let index4 = "04";
-let index5 = "05";
-let index6 = "06";
-let index7 = "07";
-let index8 = "08";
-let index9 = "09";
+const player1Moves = [];
+const player2Moves = [];
+const winningCombination = ["123", "456", "789", "147", "258", "369", "159", "357"];
 
-function winingStatement(player, player1Name, player2Name) {
-  const playerName = player === 1 ? player1Name : player2Name;
-  return playerName + "  is winnner !!\n";
-}
-
-function printGrid() {
-  console.clear();
-  const line1 = "━━━━╋━━━━╋━━━━" + "\n";
-  const line2 = "    ┃    ┃     " + "\n";
-  const firstRow = " " + index1 + "   " + index2 + "   " + index3 + " \n";
-  const secondRow = " " + index4 + "   " + index5 + "   " + index6 + " \n";
-  const thirdRow = " " + index7 + "   " + index8 + "   " + index9 + " \n";
-  const output = line2 + firstRow + line1 + secondRow + line1 + thirdRow + line2;
-
-  return output;
-}
-
-function modifyValueInLocation(input, symbol) {
-  if (input === 1 && index1 === "01") {
-    index1 = symbol;
-  }
-
-  if (input === 2 && index2 === "02") {
-    index2 = symbol;
-  }
-
-  if (input === 3 && index3 === "03") {
-    index3 = symbol;
-  }
-
-  if (input === 4 && index4 === "04") {
-    index4 = symbol;
-  }
-
-  if (input === 5 && index5 === "05") {
-    index5 = symbol;
-  }
-
-  if (input === 6 && index6 === "06") {
-    index6 = symbol;
-  }
-
-  if (input === 7 && index7 === "07") {
-    index7 = symbol;
-  }
-
-  if (input === 8 && index8 === "08") {
-    index8 = symbol;
-  }
-
-  if (input === 9 && index9 === "09") {
-    index9 = symbol;
-  }
-
-}
-
-function isPlayerWin() {
-  if ((index1 === index2 && index3 === index2) || (index4 === index5 && index6 === index5)
-    || (index7 === index8 && index9 === index8) || (index1 === index4 && index7 === index1)
-    || (index2 === index5 && index8 === index5) || (index3 === index6 && index9 === index3)
-    || (index1 === index5 && index9 === index5) || (index3 === index5 && index7 === index3)) {
-    return true;
+function isValuePresent(array, value) {
+  for (let index = 0; index < array.length; index++) {
+    if (array[index] === value) {
+      return true;
+    }
   }
 
   return false;
 }
 
-function getSymbol(player) {
-  return (player === 1) ? "❌" : "⚪️";
+function getSymbol(player1Moves, player2Moves, index) {
+  if (isValuePresent(player1Moves, index)) {
+    return " ❌ ";
+  }
+
+  return isValuePresent(player2Moves, index) ? " ⚪️ " : "    ";
 }
 
-function inputSection(player, player1Name, player2Name) {
-  const playerName = player === 1 ? player1Name : player2Name;
-  return +prompt("\nNow  " + playerName + "'s turn  : 1 to 9  : ");
+function createGrid(player1Moves, player2Moves) {
+  let string = "";
+
+  for (let index = 1; index <= 9; index++) {
+    if (index % 3 === 1 && index > 3) {
+      string += "\n\n";
+    }
+
+    string += getSymbol(player1Moves, player2Moves, index);
+    string += "┃";
+  }
+
+  return string;
 }
 
-function playTicTacToe(player, player1Name, player2Name) {
-  for (let attempt = 1; attempt < 10; attempt++) {
-    player = attempt % 2 === 0 ? 2 : 1;
-
-    const symbol = getSymbol(player);
-    const input = inputSection(player, player1Name, player2Name);
-
-    modifyValueInLocation(input, symbol);
-    console.log(printGrid());
-
-    if (isPlayerWin()) {
-      return winingStatement(player, player1Name, player2Name);
+function isValidMoves(input) {
+  for (let index = 0; index < 5; index++) {
+    if (player1Moves[index] === input || player2Moves[index] === input) {
+      return false;
     }
   }
 
-  return "no. of attempt emptied...\n";
+  return true;
 }
 
-function showWelcomeContext() {
+function inputSection(playerName) {
+  return +prompt("\nNow " + playerName + "'s turn, press a number(1 to 9 ) : ");
+}
+
+function addPlayer1Moves(index, player1Name) {
+  const input1 = inputSection(player1Name);
+  console.clear();
+
+  if (!isValidMoves(input1)) {
+    return "invalid moves";
+  }
+
+  player1Moves[index] = input1;
+  console.log(createGrid(player1Moves, player2Moves));
+}
+
+function addPlayer2Moves(index, player2Name) {
+  const input2 = inputSection(player2Name);
+  console.clear();
+
+  if (!isValidMoves(input2)) {
+    return "invalid moves";
+  }
+
+  player2Moves[index] = input2;
+  console.log(createGrid(player1Moves, player2Moves));
+}
+
+function isSubset(array, subset) {
+  for (let index = 0; index < subset.length; index++) {
+    if (!isValuePresent(array, +  subset[index])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isPlayerWin() {
+  for (let index = 1; index < winningCombination.length; index++) {
+    if (isSubset(player1Moves, winningCombination[index])) {
+      return true;
+    }
+
+    if (isSubset(player2Moves, winningCombination[index])) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function playTicTacToe(player1Name, player2Name) {
+  for (let index = 0; index < 5; index++) {
+
+    console.log(addPlayer1Moves(index, player1Name));
+    if (isPlayerWin()) {
+      return player1Name + " is winner...";
+    }
+
+    console.log(addPlayer2Moves(index, player2Name));
+    if (isPlayerWin()) {
+      return player2Name + " is winner...";
+    }
+  }
+
+  return "Game Over...";
+}
+
+function welcomeContext() {
   return "\n************** welcome to Tic Tac Toe  ***********************\n";
 }
 
-function Instruction() {
-  return "press the numbers(1 to 9) for choosing the box , if you give wrong input or want to replace then you turn out.. ";
+function instruction() {
+  let message = "press the numbers(1 to 9) for choosing the box ,";
+  message += "if you give wrong input or want to replace then you will miss your turn.";
+  return message;
 }
 
 function start() {
   const nameOfPlayer1 = prompt("\nenter a name of first player...");
   const nameOfPlayer2 = prompt("\nenter a name of second player...");
-  const isUserReady = confirm("\ndo you want to play ....\n ");
 
-  if (isUserReady) {
-    console.log(showWelcomeContext());
-    console.log(Instruction());
-    console.log(printGrid());
-    console.log(playTicTacToe(1, nameOfPlayer1, nameOfPlayer2));
-    console.log("Match Draw!!");
-  }
+  console.log(welcomeContext());
+  console.log(instruction());
+  console.log(createGrid(player1Moves, player2Moves));
+  console.log(playTicTacToe(nameOfPlayer1, nameOfPlayer2));
 }
 
 start();
